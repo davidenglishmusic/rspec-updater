@@ -1,3 +1,5 @@
+require 'pry'
+
 def replace_bracketed_should(line)
   case line
   when /{ should_not /
@@ -14,7 +16,7 @@ def replace_should(line)
                    fragment = line.split("\t")[-1].scan(/(.*?).should_receive/).flatten.first
                    line.gsub(fragment + '.should_receive', "expect(#{fragment}).to receive")
                  when /.should_not /
-                   fragment = line.split("\t")[-1].scan(/(.*?).should /).flatten.first
+                   fragment = line.split("\t")[-1].scan(/(.*?).should_not /).flatten.first
                    line.gsub(fragment + '.should_not', "expect(#{fragment}).not_to")
                  when /.should /
                    fragment = line.split("\t")[-1].scan(/(.*?).should /).flatten.first
