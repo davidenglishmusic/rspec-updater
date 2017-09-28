@@ -5,7 +5,7 @@ RSpec.describe Updater, '#update_line' do
     @updater = Updater.new
   end
 
-  it 'returns the an unchanged line when no changes are necessary' do
+  it 'returns an unchanged line when no changes are necessary' do
     expect(@updater.update_line("puts 'Hello World'")).to eql "puts 'Hello World'"
   end
 
