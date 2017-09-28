@@ -1,5 +1,6 @@
 class Updater
   def update_line(line)
+    return line if line.lstrip[0] == '#'
     if line.include?('{ should')
       replace_bracketed_should(line)
     elsif line.include?('.should')
