@@ -9,6 +9,11 @@ RSpec.describe Updater, '#update_line' do
     expect(@updater.update_line("puts 'Hello World'")).to eql "puts 'Hello World'"
   end
 
+  it 'returns the line when it is a comment' do
+    expect(@updater.update_line('  # this is a comment with .should in it'))
+      .to eql '  # this is a comment with .should in it'
+  end
+
   it 'updates a bracketed should line' do
     expect(@updater.update_line('it { should eql 5 }')).to eql 'it { is_expected.to eql 5 }'
   end
