@@ -24,6 +24,9 @@ class Updater
                    when /.any_instance.should_receive/
                      fragment = line.split("\t")[-1].scan(/(.*?).any_instance.should_receive/).flatten.first
                      line.gsub(fragment + '.any_instance.should_receive', "expect_any_instance_of(#{fragment}).to receive")
+                   when /.should_not_receive/
+                     fragment = line.split("\t")[-1].scan(/(.*?).should_not_receive/).flatten.first
+                     line.gsub(fragment + '.should_not_receive', "expect(#{fragment}).not_to receive")
                    when /.should_receive/
                      fragment = line.split("\t")[-1].scan(/(.*?).should_receive/).flatten.first
                      line.gsub(fragment + '.should_receive', "expect(#{fragment}).to receive")
