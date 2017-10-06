@@ -20,24 +20,25 @@ class Updater
   end
 
   def replace_should(line)
-    updated_line = case line
-                   when /.any_instance.should_receive/
-                     fragment = line.split("\t")[-1].scan(/(.*?).any_instance.should_receive/).flatten.first
-                     line.gsub(fragment + '.any_instance.should_receive', "expect_any_instance_of(#{fragment}).to receive")
-                   when /.should_not_receive/
-                     fragment = line.split("\t")[-1].scan(/(.*?).should_not_receive/).flatten.first
-                     line.gsub(fragment + '.should_not_receive', "expect(#{fragment}).not_to receive")
-                   when /.should_receive/
-                     fragment = line.split("\t")[-1].scan(/(.*?).should_receive/).flatten.first
-                     line.gsub(fragment + '.should_receive', "expect(#{fragment}).to receive")
-                   when /.should_not /
-                     fragment = line.split("\t")[-1].scan(/(.*?).should_not /).flatten.first
-                     line.gsub(fragment + '.should_not', "expect(#{fragment}).not_to")
-                   when /.should /
-                     fragment = line.split("\t")[-1].scan(/(.*?).should /).flatten.first
-                     line.gsub(fragment + '.should', "expect(#{fragment}).to")
-                   else line
-                   end
+    updated_line =
+      case line
+      when /.any_instance.should_receive/
+        fragment = line.split("\t")[-1].scan(/(.*?).any_instance.should_receive/).flatten.first
+        line.gsub(fragment + '.any_instance.should_receive', "expect_any_instance_of(#{fragment}).to receive")
+      when /.should_not_receive/
+        fragment = line.split("\t")[-1].scan(/(.*?).should_not_receive/).flatten.first
+        line.gsub(fragment + '.should_not_receive', "expect(#{fragment}).not_to receive")
+      when /.should_receive/
+        fragment = line.split("\t")[-1].scan(/(.*?).should_receive/).flatten.first
+        line.gsub(fragment + '.should_receive', "expect(#{fragment}).to receive")
+      when /.should_not /
+        fragment = line.split("\t")[-1].scan(/(.*?).should_not /).flatten.first
+        line.gsub(fragment + '.should_not', "expect(#{fragment}).not_to")
+      when /.should /
+        fragment = line.split("\t")[-1].scan(/(.*?).should /).flatten.first
+        line.gsub(fragment + '.should', "expect(#{fragment}).to")
+      else line
+      end
     updated_line.include?(' == ') ? updated_line.gsub!(' == ', ' eql ') : updated_line
   end
 
