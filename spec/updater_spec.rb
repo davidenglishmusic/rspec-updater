@@ -31,6 +31,11 @@ RSpec.describe Updater, '#update_line' do
       .to eql('expect_any_instance_of(FakeClass).to receive(:method).and_return(:true)')
   end
 
+  it 'updates a should_not_receive line' do
+    expect(@updater.update_line('FakeClass.should_not_receive(:method).and_return(:true)'))
+      .to eql('expect(FakeClass).not_to receive(:method).and_return(:true)')
+  end
+
   it 'updates a should_receive line' do
     expect(@updater.update_line('FakeClass.should_receive(:method).and_return(:true)'))
       .to eql('expect(FakeClass).to receive(:method).and_return(:true)')
