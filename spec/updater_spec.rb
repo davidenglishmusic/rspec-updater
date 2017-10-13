@@ -65,4 +65,14 @@ RSpec.describe Updater, '#update_line' do
     expect(@updater.update_line('FakeClass.stub(:fake_method)'))
       .to eql('allow(FakeClass).to receive(:fake_method)')
   end
+
+  it 'updates a line with spaces at the beginning' do
+    expect(@updater.update_line('  fake_result.should eql 6'))
+      .to eql('  expect(fake_result).to eql 6')
+  end
+
+  it 'updates a line with tabs at the beginning' do
+    expect(@updater.update_line("\t\tfake_result.should eql 6"))
+      .to eql("\t\texpect(fake_result).to eql 6")
+  end
 end
