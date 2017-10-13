@@ -25,19 +25,19 @@ class Updater
     updated_line =
       case line
       when /.any_instance.should_receive/
-        fragment = line.lstrip.scan(/(.*?).any_instance.should_receive/).flatten.first
+        fragment = extract_fragment(line, /(.*?).any_instance.should_receive/)
         line.gsub(fragment + '.any_instance.should_receive', "expect_any_instance_of(#{fragment}).to receive")
       when /.should_not_receive/
-        fragment = line.lstrip.scan(/(.*?).should_not_receive/).flatten.first
+        fragment = extract_fragment(line, /(.*?).should_not_receive/)
         line.gsub(fragment + '.should_not_receive', "expect(#{fragment}).not_to receive")
       when /.should_receive/
-        fragment = line.lstrip.scan(/(.*?).should_receive/).flatten.first
+        fragment = extract_fragment(line, /(.*?).should_receive/)
         line.gsub(fragment + '.should_receive', "expect(#{fragment}).to receive")
       when /.should_not /
-        fragment = line.lstrip.scan(/(.*?).should_not /).flatten.first
+        fragment = extract_fragment(line, /(.*?).should_not /)
         line.gsub(fragment + '.should_not', "expect(#{fragment}).not_to")
       when /.should /
-        fragment = line.lstrip.scan(/(.*?).should /).flatten.first
+        fragment = extract_fragment(line, /(.*?).should /)
         line.gsub(fragment + '.should', "expect(#{fragment}).to")
       else line
       end
@@ -47,15 +47,19 @@ class Updater
   def replace_stub(line)
     case line
     when /.stub_chain/
-      fragment = line.lstrip.scan(/(.*?).stub_chain\(/).flatten.first
+      fragment = extract_fragment(line, /(.*?).stub_chain\(/)
       line.gsub(fragment + '.stub_chain', "allow(#{fragment}).to receive_message_chain")
     when /.any_instance.stub\(/
-      fragment = line.scan(/(.*?).any_instance.stub/).flatten.first
+      fragment = extract_fragment(line, /(.*?).any_instance.stub/)
       line.gsub(fragment + '.any_instance.stub', "allow_any_instance_of(#{fragment}).to receive")
     when /.stub\(/
-      fragment = line.lstrip.scan(/(.*?).stub/).flatten.first
+      fragment = extract_fragment(line, /(.*?).stub/)
       line.gsub(fragment + '.stub', "allow(#{fragment}).to receive")
     else line
     end
+  end
+
+  def extract_fragment(line, regex)
+    line.lstrip.scan(regex).flatten.first
   end
 end
