@@ -1,4 +1,5 @@
 require_relative 'line'
+require_relative 'should_line'
 
 class BracketedLine < Line
   def updated
@@ -8,7 +9,7 @@ class BracketedLine < Line
     when /{ should /
       @code.gsub('{ should', '{ is_expected.to')
     else
-      @code
+      ShouldLine.new(@code).updated
     end
   end
 end
