@@ -1,12 +1,11 @@
-require './lib/updater'
+require_relative 'lib/line_factory'
 
 path = ARGV.first
 line_index = 1
-@updater = Updater.new
 
 lines = IO.readlines(path).map do |line|
   old_line = line
-  updated_line = @updater.update_line(old_line)
+  updated_line = LineFactory.from(line).updated
 
   if old_line != updated_line
     puts "Replacing #{line_index}"
