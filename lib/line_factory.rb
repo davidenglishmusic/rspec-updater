@@ -18,31 +18,31 @@ class LineFactory
     case code
     when /\s+#/
       Line.new(code)
-    when /{ should_not /
+    when /{ should_not(\.|\ |\()/
       BracketedItShouldNotLine.new(code)
-    when /{ should /
+    when /{ should(\.|\ |\()/
       BracketedItShouldLine.new(code)
-    when /{(.+?\.should.+?)}/
+    when /{(.+?\.should(\.|\ |\().+?)}/
       BracketedInsideShouldLine.new(code)
-    when /{(.+?.should_not.+?)}/
+    when /{(.+?.should_not(\.|\ |\().+?)}/
       BracketedInsideShouldNotLine.new(code)
-    when /{(.+?\.stub.+?)}/
+    when /{(.+?\.stub(\.|\ |\().+?)}/
       BracketedInsideStubLine.new(code)
-    when /\.stub_chain/
+    when /\.stub_chain(\.|\ |\()/
       StubChainLine.new(code)
-    when /\.any_instance.stub\(/
+    when /\.any_instance.stub(\.|\ |\()/
       AnyInstanceStubLine.new(code)
-    when /\.stub/
+    when /\.stub(\.|\ |\()/
       StubLine.new(code)
-    when /\.any_instance.should_receive/
+    when /\.any_instance.should_receive(\.|\ |\()/
       AnyInstanceShouldReceiveLine.new(code)
-    when /\.should_not_receive/
+    when /\.should_not_receive(\.|\ |\()/
       ShouldNotReceiveLine.new(code)
-    when /\.should_receive/
+    when /\.should_receive(\.|\ |\()/
       ShouldReceiveLine.new(code)
-    when /\.should_not/
+    when /\.should_not(\.|\ |\()/
       ShouldNotLine.new(code)
-    when /\.should/
+    when /\.should(\.|\ |\()/
       ShouldLine.new(code)
     else
       Line.new(code)
