@@ -11,6 +11,11 @@ RSpec.describe Line, '#updated' do
     expect(no_changes_needed_line.updated).to eql 'def my_method(should_parameter)'
   end
 
+  it 'returns an unchanged line when stub is mentioned but is not a recognized method call' do
+    no_changes_needed_line = LineFactory.from('person.stub_toe_on(coffee_table)')
+    expect(no_changes_needed_line.updated).to eql 'person.stub_toe_on(coffee_table)'
+  end
+
   it 'returns the line when it is a comment' do
     commented_out_line = LineFactory.from('  # this is a comment with .should in it')
     expect(commented_out_line.updated)
