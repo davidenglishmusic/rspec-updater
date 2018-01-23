@@ -18,8 +18,13 @@ RSpec.describe Line, '#updated' do
 
   it 'returns the line when it is a comment' do
     commented_out_line = LineFactory.from('  # this is a comment with .should in it')
-    expect(commented_out_line.updated)
-      .to eql '  # this is a comment with .should in it'
+    expect(commented_out_line.updated).to eql '  # this is a comment with .should in it'
+  end
+
+  it 'updates a should line with a comment at the end' do
+    comment_at_end_should_line = LineFactory.from('it { should have_one(:tomato) } # :as => :vegetable')
+    expect(comment_at_end_should_line.updated)
+      .to eql 'it { is_expected.to have_one(:tomato) } # :as => :vegetable'
   end
 
   it 'updates a bracketed it should_not line' do
