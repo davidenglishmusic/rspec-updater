@@ -16,7 +16,7 @@ require_relative 'should_not_line'
 class LineFactory
   def self.from(code)
     case code
-    when /\s+#/
+    when /^\s*#/
       Line.new(code)
     when /{ should_not(\.|\ |\()/
       BracketedItShouldNotLine.new(code)
