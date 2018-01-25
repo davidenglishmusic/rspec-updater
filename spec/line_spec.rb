@@ -39,6 +39,12 @@ RSpec.describe Line, '#updated' do
       .to eql 'it { is_expected.to eql 2 }'
   end
 
+  it 'updates a bracketed it should line missing spaces on the insides of the brackets' do
+    bracketed_it_should_line = LineFactory.from('it {should eql 6}')
+    expect(bracketed_it_should_line.updated)
+      .to eql 'it {is_expected.to eql 6}'
+  end
+
   it 'updates a line with should outside of the brackets' do
     should_outside_brackets_line = LineFactory.from('-> { get :show }.should raise_error(StandardError)')
     expect(should_outside_brackets_line.updated)
@@ -61,6 +67,12 @@ RSpec.describe Line, '#updated' do
     stub_inside_brackets_line = LineFactory.from('before(:each) { @controller.stub(:current_person).and_return(person) }')
     expect(stub_inside_brackets_line.updated)
       .to eql('before(:each) { allow(@controller).to receive(:current_person).and_return(person) }')
+  end
+
+  it 'updates a bracketed line with a stub expression inside the brackets where spaces are missing on the insides of the brackets' do
+    stub_inside_brackets_line = LineFactory.from('before(:each) {@controller.stub(:current_person).and_return(person)}')
+    expect(stub_inside_brackets_line.updated)
+      .to eql('before(:each) {allow(@controller).to receive(:current_person).and_return(person)}')
   end
 
   it 'updates a bracketed line with an unstub expression inside the brackets' do
