@@ -20,35 +20,35 @@ class LineFactory
     case code
     when /^\s*#/
       Line.new(code)
-    when /{ should_not(\.|\ |\()/
+    when BracketedItShouldNotLine::PATTERN
       BracketedItShouldNotLine.new(code)
-    when /{ should(\.|\ |\()/
+    when BracketedItShouldLine::PATTERN
       BracketedItShouldLine.new(code)
-    when /{(.+?\.should(\.|\ |\().+?)}/
+    when BracketedInsideShouldLine::PATTERN
       BracketedInsideShouldLine.new(code)
-    when /{(.+?.should_not(\.|\ |\().+?)}/
+    when BracketedInsideShouldNotLine::PATTERN
       BracketedInsideShouldNotLine.new(code)
-    when /{(.+?\.unstub(\.|\ |\().+?)}/
+    when BracketedInsideUnstubLine::PATTERN
       BracketedInsideUnstubLine.new(code)
-    when /{(.+?\.stub(\.|\ |\().+?)}/
+    when BracketedInsideStubLine::PATTERN
       BracketedInsideStubLine.new(code)
-    when /\.stub_chain(\.|\ |\()/
+    when StubChainLine::PATTERN
       StubChainLine.new(code)
-    when /\.any_instance.stub(\.|\ |\()/
+    when AnyInstanceStubLine::PATTERN
       AnyInstanceStubLine.new(code)
-    when /\.unstub(\.|\ |\()/
+    when UnstubLine::PATTERN
       UnstubLine.new(code)
-    when /\.stub(\.|\ |\()/
+    when StubLine::PATTERN
       StubLine.new(code)
-    when /\.any_instance.should_receive(\.|\ |\()/
+    when AnyInstanceShouldReceiveLine::PATTERN
       AnyInstanceShouldReceiveLine.new(code)
-    when /\.should_not_receive(\.|\ |\()/
+    when ShouldNotReceiveLine::PATTERN
       ShouldNotReceiveLine.new(code)
-    when /\.should_receive(\.|\ |\()/
+    when ShouldReceiveLine::PATTERN
       ShouldReceiveLine.new(code)
-    when /\.should_not(\.|\ |\()/
+    when ShouldNotLine::PATTERN
       ShouldNotLine.new(code)
-    when /\.should(\.|\ |\()/
+    when ShouldLine::PATTERN
       ShouldLine.new(code)
     else
       Line.new(code)

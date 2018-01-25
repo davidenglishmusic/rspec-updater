@@ -1,8 +1,11 @@
-require_relative 'line'
+require_relative 'bracketed_line'
 require_relative 'should_line'
 
-class BracketedInsideShouldLine < Line
+class BracketedInsideShouldLine < BracketedLine
+  PATTERN = /{\s*(.+?.should.+?)\s*}/
+
   def updated
-    @code.gsub(/{(.+?.should.+?)}/, '{' + ShouldLine.new(extract_fragment(@code, /{(.+?.should.+?)}/)).updated + '}')
+    unbracketed_code = bracketed_fragment(PATTERN)
+    @code.gsub(unbracketed_code, ShouldLine.new(extract_fragment(@code, unbracketed_code)).updated)
   end
 end

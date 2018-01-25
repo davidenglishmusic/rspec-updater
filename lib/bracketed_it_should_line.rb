@@ -1,7 +1,9 @@
-require_relative 'line'
+require_relative 'bracketed_line'
 
-class BracketedItShouldLine < Line
+class BracketedItShouldLine < BracketedLine
+  PATTERN = /{\s*(should)/
+
   def updated
-    @code.gsub('{ should', '{ is_expected.to')
+    @code.gsub(bracketed_fragment(PATTERN), 'is_expected.to')
   end
 end

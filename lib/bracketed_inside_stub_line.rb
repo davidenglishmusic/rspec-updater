@@ -1,8 +1,11 @@
-require_relative 'line'
+require_relative 'bracketed_line'
 require_relative 'stub_line'
 
-class BracketedInsideStubLine < Line
+class BracketedInsideStubLine < BracketedLine
+  PATTERN = /{\s*(.+?.stub.+?)\s*}/
+
   def updated
-    @code.gsub(/{(.+?.stub.+?)}/, '{' + StubLine.new(extract_fragment(@code, /{(.+?.stub.+?)}/)).updated + '}')
+    unbracketed_code = bracketed_fragment(PATTERN)
+    @code.gsub(unbracketed_code, StubLine.new(extract_fragment(@code, unbracketed_code)).updated)
   end
 end

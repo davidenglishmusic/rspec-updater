@@ -1,7 +1,9 @@
-require_relative 'line'
+require_relative 'bracketed_line'
 
-class BracketedItShouldNotLine < Line
+class BracketedItShouldNotLine < BracketedLine
+  PATTERN = /{\s*(should_not)/
+
   def updated
-    @code.gsub('{ should_not', '{ is_expected.not_to')
+    @code.gsub(bracketed_fragment(PATTERN), 'is_expected.not_to')
   end
 end
