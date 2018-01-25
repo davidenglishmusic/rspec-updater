@@ -1,3 +1,4 @@
+require_relative 'comment_line'
 require_relative 'line'
 require_relative 'stub_line'
 require_relative 'unstub_line'
@@ -15,43 +16,30 @@ require_relative 'should_not_receive_line'
 require_relative 'should_receive_line'
 require_relative 'should_not_line'
 
+LINE_TYPES = [
+  CommentLine,
+  BracketedItShouldNotLine,
+  BracketedItShouldLine,
+  BracketedInsideShouldNotLine,
+  BracketedInsideShouldLine,
+  BracketedInsideUnstubLine,
+  BracketedInsideStubLine,
+  StubChainLine,
+  AnyInstanceStubLine,
+  UnstubLine,
+  StubLine,
+  AnyInstanceShouldReceiveLine,
+  ShouldNotReceiveLine,
+  ShouldReceiveLine,
+  ShouldNotLine,
+  ShouldLine
+].freeze
+
 class LineFactory
   def self.from(code)
-    case code
-    when /^\s*#/
-      Line.new(code)
-    when BracketedItShouldNotLine::PATTERN
-      BracketedItShouldNotLine.new(code)
-    when BracketedItShouldLine::PATTERN
-      BracketedItShouldLine.new(code)
-    when BracketedInsideShouldLine::PATTERN
-      BracketedInsideShouldLine.new(code)
-    when BracketedInsideShouldNotLine::PATTERN
-      BracketedInsideShouldNotLine.new(code)
-    when BracketedInsideUnstubLine::PATTERN
-      BracketedInsideUnstubLine.new(code)
-    when BracketedInsideStubLine::PATTERN
-      BracketedInsideStubLine.new(code)
-    when StubChainLine::PATTERN
-      StubChainLine.new(code)
-    when AnyInstanceStubLine::PATTERN
-      AnyInstanceStubLine.new(code)
-    when UnstubLine::PATTERN
-      UnstubLine.new(code)
-    when StubLine::PATTERN
-      StubLine.new(code)
-    when AnyInstanceShouldReceiveLine::PATTERN
-      AnyInstanceShouldReceiveLine.new(code)
-    when ShouldNotReceiveLine::PATTERN
-      ShouldNotReceiveLine.new(code)
-    when ShouldReceiveLine::PATTERN
-      ShouldReceiveLine.new(code)
-    when ShouldNotLine::PATTERN
-      ShouldNotLine.new(code)
-    when ShouldLine::PATTERN
-      ShouldLine.new(code)
-    else
-      Line.new(code)
+    LINE_TYPES.each do |line_type|
+      return line_type.new(code) if code[line_type::PATTERN]
     end
+    Line.new(code)
   end
 end
