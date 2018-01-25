@@ -63,6 +63,12 @@ RSpec.describe Line, '#updated' do
       .to eql('before(:each) { allow(@controller).to receive(:current_person).and_return(person) }')
   end
 
+  it 'updates a bracketed line with an unstub expression inside the brackets' do
+    unstub_inside_brackets_line = LineFactory.from('after { Rails.unstub(:env) }')
+    expect(unstub_inside_brackets_line.updated)
+      .to eql('after { allow(Rails).to receive(:env).and_call_original }')
+  end
+
   it 'updates a stub_chain line' do
     stub_chain_line = LineFactory.from('FakeClass.stub_chain(:message_a, :message_b)')
     expect(stub_chain_line.updated)
@@ -78,6 +84,11 @@ RSpec.describe Line, '#updated' do
   it 'updates a stub line' do
     stub_line = LineFactory.from('FakeClass.stub(:fake_method)')
     expect(stub_line.updated).to eql('allow(FakeClass).to receive(:fake_method)')
+  end
+
+  it 'updates an unstub line' do
+    unstub_line = LineFactory.from('Person.unstub(:toe)')
+    expect(unstub_line.updated).to eql('allow(Person).to receive(:toe).and_call_original')
   end
 
   it 'updates an any_instance should_receive line' do
