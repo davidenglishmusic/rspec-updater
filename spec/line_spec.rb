@@ -33,6 +33,12 @@ RSpec.describe Line, '#updated' do
       .to eql 'it { is_expected.not_to eql 5 }'
   end
 
+  it 'updates a bracketed it should_not line where a temporary variable defined at the start' do
+    bracketed_it_should_not_line_with_variable = LineFactory.from('3.times.each { |index| page.should_not have_content("first") }')
+    expect(bracketed_it_should_not_line_with_variable.updated)
+      .to eql '3.times.each { |index| expect(page).not_to have_content("first") }'
+  end
+
   it 'updates a bracketed it should line' do
     bracketed_it_should_line = LineFactory.from('it { should eql 2 }')
     expect(bracketed_it_should_line.updated)
@@ -43,6 +49,12 @@ RSpec.describe Line, '#updated' do
     bracketed_it_should_line = LineFactory.from('it {should eql 6}')
     expect(bracketed_it_should_line.updated)
       .to eql 'it {is_expected.to eql 6}'
+  end
+
+  it 'updates a bracketed it should line where a temporary variable defined at the start' do
+    bracketed_it_should_line_with_variable = LineFactory.from('3.times.each { |index| page.should have_content("Salut") }')
+    expect(bracketed_it_should_line_with_variable.updated)
+      .to eql '3.times.each { |index| expect(page).to have_content("Salut") }'
   end
 
   it 'updates a line with should outside of the brackets' do
