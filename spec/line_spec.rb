@@ -98,16 +98,22 @@ RSpec.describe Line, '#updated' do
       .to eql('before(:each) {allow(@controller).to receive(:current_person).and_return(person)}')
   end
 
-  # it 'updates a bracketed line with a stub expression inside the brackets where a temporary variable defined at the start' do
-  #   stub_inside_brackets_line = LineFactory.from('before(:each) { |item| item.stub(:current_person).and_return(person) }')
-  #   expect(stub_inside_brackets_line.updated)
-  #     .to eql('before(:each) { |item| allow(item).to receive(:current_person).and_return(person) }')
-  # end
+  it 'updates a bracketed line with a stub expression inside the brackets where a temporary variable defined at the start' do
+    stub_inside_brackets_line = LineFactory.from('before(:each) { |item| item.stub(:current_person).and_return(person) }')
+    expect(stub_inside_brackets_line.updated)
+      .to eql('before(:each) { |item| allow(item).to receive(:current_person).and_return(person) }')
+  end
 
   it 'updates a bracketed line with an unstub expression inside the brackets' do
     unstub_inside_brackets_line = LineFactory.from('after { Rails.unstub(:env) }')
     expect(unstub_inside_brackets_line.updated)
       .to eql('after { allow(Rails).to receive(:env).and_call_original }')
+  end
+
+  it 'updates a bracketed line with a unstub expression inside the brackets where a temporary variable defined at the start' do
+    unstub_inside_brackets_line = LineFactory.from('after { |item| item.unstub(:plastic) }')
+    expect(unstub_inside_brackets_line.updated)
+      .to eql('after { |item| allow(item).to receive(:plastic).and_call_original }')
   end
 
   it 'updates a stub_chain line' do
