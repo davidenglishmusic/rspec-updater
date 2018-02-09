@@ -2,7 +2,7 @@ require_relative 'bracketed_line'
 require_relative 'stub_line'
 
 class BracketedInsideStubLine < BracketedLine
-  PATTERN = /{\s*(.+?.stub.+?)\s*}/
+  PATTERN = /{(?:\s*\|\S+\|\s*|\s*)(.+?.stub.+?)\s*}/
 
   def updated
     unbracketed_code = bracketed_fragment(PATTERN)
