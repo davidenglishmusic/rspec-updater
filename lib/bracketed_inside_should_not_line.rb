@@ -2,7 +2,7 @@ require_relative 'bracketed_line'
 require_relative 'should_not_line'
 
 class BracketedInsideShouldNotLine < BracketedLine
-  PATTERN = /{(?:\s*\|\S+\|\s*|\s*)(.+?.should_not.+?)\s*}/
+  PATTERN = /{(?:\s*\|.*?\|\s*|\s*)(.+?.should_not.+?)\s*}/
 
   def updated
     unbracketed_code = bracketed_fragment(PATTERN)
