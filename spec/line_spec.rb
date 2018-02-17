@@ -45,6 +45,12 @@ RSpec.describe Line, '#updated' do
       .to eql '3.times.each { |index| expect(page).not_to have_content("first") }'
   end
 
+  it 'updates a bracketed it should_not line with multiple temporary variables defined at the start' do
+    bracketed_it_should_not_line_with_variables = LineFactory.from('people.each_with_index { |person, index| person.name.should_not == address_book[index] }')
+    expect(bracketed_it_should_not_line_with_variables.updated)
+      .to eql 'people.each_with_index { |person, index| expect(person.name).not_to == address_book[index] }'
+  end
+
   it 'updates a bracketed it should line' do
     bracketed_it_should_line = LineFactory.from('it { should eql 2 }')
     expect(bracketed_it_should_line.updated)
@@ -66,6 +72,12 @@ RSpec.describe Line, '#updated' do
     bracketed_it_should_line_with_variable = LineFactory.from('3.times.each { |index| page.should have_content("Salut") }')
     expect(bracketed_it_should_line_with_variable.updated)
       .to eql '3.times.each { |index| expect(page).to have_content("Salut") }'
+  end
+
+  it 'updates a bracketed it should line with multiple temporary variables defined at the start' do
+    bracketed_it_should_line_with_variables = LineFactory.from('people.each_with_index { |person, index| person.name.should == address_book[index] }')
+    expect(bracketed_it_should_line_with_variables.updated)
+      .to eql 'people.each_with_index { |person, index| expect(person.name).to == address_book[index] }'
   end
 
   it 'updates a line with should outside of the brackets' do
@@ -104,6 +116,12 @@ RSpec.describe Line, '#updated' do
       .to eql('before(:each) { |item| allow(item).to receive(:current_person).and_return(person) }')
   end
 
+  it 'updates a bracketed line with a stub expression inside the brackets with multiple temporary variables defined at the start' do
+    stub_inside_brackets_line = LineFactory.from('before(:each) { |item, converted_item| item.stub(:current_person).and_return(converted_item) }')
+    expect(stub_inside_brackets_line.updated)
+      .to eql('before(:each) { |item, converted_item| allow(item).to receive(:current_person).and_return(converted_item) }')
+  end
+
   it 'updates a bracketed line with an unstub expression inside the brackets' do
     unstub_inside_brackets_line = LineFactory.from('after { Rails.unstub(:env) }')
     expect(unstub_inside_brackets_line.updated)
@@ -114,6 +132,12 @@ RSpec.describe Line, '#updated' do
     unstub_inside_brackets_line = LineFactory.from('after { |item| item.unstub(:plastic) }')
     expect(unstub_inside_brackets_line.updated)
       .to eql('after { |item| allow(item).to receive(:plastic).and_call_original }')
+  end
+
+  it 'updates a bracketed line with a unstub expression inside the brackets with multiple temporary variables defined at the start' do
+    unstub_inside_brackets_line = LineFactory.from('after { |item, _index| item.unstub(:plastic) }')
+    expect(unstub_inside_brackets_line.updated)
+      .to eql('after { |item, _index| allow(item).to receive(:plastic).and_call_original }')
   end
 
   it 'updates a stub_chain line' do
